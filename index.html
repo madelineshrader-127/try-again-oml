@@ -218,6 +218,24 @@
       margin-bottom:1rem; 
       border-radius:3px; 
     }
+    .read-more-btn {
+      background: #98A1BC;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      transition: background 0.3s;
+    }
+    .read-more-btn:hover, .read-more-btn:focus {
+      background: #7f879c;
+      outline: 2px solid #555879;
+      outline-offset: 2px;
+    }
 
     /* Subscribe box */
     #subscribe-box { 
@@ -381,7 +399,9 @@
 const STATE = {
   posts: [],
   subscribers: [],
-  currentTab: 'home'
+  currentTab: 'home',
+  isAuthenticated: false,
+  adminPassword: 'poligeist2024' // Change this to your desired password
 };
 
 // Initialize from localStorage with error handling
