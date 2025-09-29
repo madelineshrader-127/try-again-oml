@@ -5,38 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The PoliGeist – Politics, Culture, and the Supernatural</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <script src="https://npmcdn.com/parse@3.4.4/dist/parse.min.js"></script>
   <style>
     /* Reset and base styles */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: Georgia, 'Times New Roman', serif; line-height:1.8; color:#333; background:#f9f9f9; }
-
-    /* Loading spinner */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .loading-overlay.active { display: flex; }
-    .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #98A1BC;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
 
     /* Header */
     header {
@@ -114,13 +86,6 @@
       background:#7f8c8d; 
       outline: 2px solid #555879;
       outline-offset: 2px;
-    }
-    .logout-btn {
-      background: #e74c3c;
-      margin-left: 1rem;
-    }
-    .logout-btn:hover, .logout-btn:focus {
-      background: #c0392b;
     }
 
     /* Admin panel form */
@@ -203,10 +168,6 @@
       outline: 2px solid #555879;
       outline-offset: 2px;
     }
-    button[type="submit"]:disabled, .subscribe-btn:disabled {
-      background: #bdc3c7;
-      cursor: not-allowed;
-    }
     .export-btn { background:#27ae60; margin-left:1rem; margin-top: 0.5rem; }
     .export-btn:hover, .export-btn:focus { background:#229954; }
 
@@ -218,31 +179,11 @@
       border-radius:4px; 
       box-shadow:0 2px 8px rgba(0,0,0,0.1); 
       border-left:4px solid #98A1BC; 
-      position: relative;
     }
     .post h2 { font-size:2rem; color:#2c3e50; margin-bottom:0.75rem; line-height:1.3; }
     .post-meta { color:#7f8c8d; font-size:0.95rem; margin-bottom:1.5rem; font-style:italic; }
     .post-content { color:#34495e; font-size:1.1rem; line-height:1.8; }
     .post-content img { max-width: 100%; height: auto; border-radius: 4px; margin: 1rem 0; }
-
-    /* Delete button for posts */
-    .delete-post-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: #e74c3c;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-family: Georgia, serif;
-      transition: background 0.3s;
-    }
-    .delete-post-btn:hover, .delete-post-btn:focus {
-      background: #c0392b;
-    }
 
     /* Empty states */
     .empty-state { 
@@ -343,31 +284,6 @@
       border-radius: 4px;
     }
 
-    /* Error message */
-    .error-message {
-      background: #e74c3c;
-      color: white;
-      padding: 1rem;
-      border-radius: 4px;
-      margin: 1rem 0;
-      display: none;
-    }
-
-    /* Config notice */
-    .config-notice {
-      background: #f39c12;
-      color: white;
-      padding: 1.5rem;
-      border-radius: 4px;
-      margin: 2rem 0;
-      text-align: center;
-    }
-    .config-notice strong {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 1.2rem;
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
       .nav-tab { padding: 0.75rem 1rem; font-size: 0.9rem; }
@@ -375,7 +291,6 @@
       h1 { font-size: 2rem; }
       #subscribe-box input[type=email] { max-width: 100%; margin-bottom: 1rem; }
       .export-btn { margin-left: 0; margin-top: 1rem; display: block; width: 100%; }
-      .logout-btn { margin-left: 0; margin-top: 0.5rem; display: block; width: 100%; }
     }
 
     /* Character counter */
@@ -388,10 +303,6 @@
   </style>
 </head>
 <body>
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"></div>
-</div>
-
 <header>
   <h1>The PoliGeist</h1>
   <p class="subtitle">Politics, Culture, and the Supernatural</p>
@@ -408,16 +319,8 @@
 </nav>
 
 <div class="container">
-  <div id="configNotice" class="config-notice" style="display:none;">
-    <strong>⚠️ Configuration Required</strong>
-    <p>Please update the Back4app credentials in the code to connect to your database.</p>
-  </div>
-
-  <div class="error-message" id="errorMessage"></div>
-
   <div class="admin-toggle">
-    <button class="toggle-btn" onclick="toggleAdmin()" aria-expanded="false" aria-controls="adminPanel">Admin Login</button>
-    <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+    <button class="toggle-btn" onclick="toggleAdmin()" aria-expanded="false" aria-controls="adminPanel">Toggle Admin Panel</button>
   </div>
 
   <div class="admin-panel" id="adminPanel" style="display:none;" role="region" aria-label="Admin panel">
@@ -448,7 +351,7 @@
         </div>
         <div id="content" contenteditable="true" role="textbox" aria-label="Post content" aria-multiline="true"></div>
       </div>
-      <button type="submit" id="publishBtn">Publish Post</button>
+      <button type="submit">Publish Post</button>
       <button type="button" class="export-btn" onclick="exportPosts()">Export Data</button>
     </form>
   </div>
@@ -457,7 +360,7 @@
     <div id="featuredPost">
       <div class="empty-state">
         <h3>Welcome to The PoliGeist</h3>
-        <p>Loading articles...</p>
+        <p>No articles published yet. Toggle the admin panel to create your first post!</p>
       </div>
     </div>
   </div>
@@ -492,61 +395,28 @@
 </footer>
 
 <script>
-// ============================================
-// BACK4APP CONFIGURATION
-// ============================================
-// Replace these with your Back4app credentials from:
-// App Settings → Security & Keys
-const BACK4APP_CONFIG = {
-  applicationId: 'YOUR_APPLICATION_ID_HERE',
-  javascriptKey: 'YOUR_JAVASCRIPT_KEY_HERE',
-  serverURL: 'https://parseapi.back4app.com'
-};
-
-// Initialize Parse
-Parse.initialize(BACK4APP_CONFIG.applicationId, BACK4APP_CONFIG.javascriptKey);
-Parse.serverURL = BACK4APP_CONFIG.serverURL;
-
-// Check if config is set
-const isConfigured = BACK4APP_CONFIG.applicationId !== 'YOUR_APPLICATION_ID_HERE';
-
-// ============================================
-// STATE MANAGEMENT
-// ============================================
+// State management
 const STATE = {
   posts: [],
   subscribers: [],
   currentTab: 'home',
-  currentUser: null,
+  isAuthenticated: false,
   adminPassword: 'poligeist2024' // Change this to your desired password
 };
 
-// ============================================
-// LOADING SPINNER
-// ============================================
-function showLoading() {
-  document.getElementById('loadingOverlay').classList.add('active');
+// Initialize from localStorage with error handling
+function initializeState() {
+  try {
+    STATE.posts = JSON.parse(localStorage.getItem('poligeistPosts')) || [];
+    STATE.subscribers = JSON.parse(localStorage.getItem('poligeistSubscribers')) || [];
+  } catch (e) {
+    console.error('Error loading from localStorage:', e);
+    STATE.posts = [];
+    STATE.subscribers = [];
+  }
 }
 
-function hideLoading() {
-  document.getElementById('loadingOverlay').classList.remove('active');
-}
-
-// ============================================
-// ERROR HANDLING
-// ============================================
-function showError(message) {
-  const errorEl = document.getElementById('errorMessage');
-  errorEl.textContent = message;
-  errorEl.style.display = 'block';
-  setTimeout(() => {
-    errorEl.style.display = 'none';
-  }, 5000);
-}
-
-// ============================================
-// JST CLOCK
-// ============================================
+// JST Clock
 function updateClock() {
   try {
     const now = new Date(new Date().toLocaleString("en-US", {timeZone:"Asia/Tokyo"}));
@@ -569,146 +439,45 @@ function updateClock() {
   }
 }
 
-// ============================================
-// TABS
-// ============================================
+// Tabs
 function switchTab(tab, button) {
   STATE.currentTab = tab;
   
+  // Update nav buttons
   document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
   if (button) button.classList.add('active');
   
+  // Update content
   document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
   const tabContent = document.getElementById(tab + 'Tab');
   if (tabContent) tabContent.classList.add('active');
 }
 
-// ============================================
-// HTML UTILITIES
-// ============================================
+// Sanitize HTML to prevent XSS
+function sanitizeHTML(html) {
+  const temp = document.createElement('div');
+  temp.textContent = html;
+  return temp.innerHTML;
+}
+
+// Escape HTML for safe display
 function escapeHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
 }
 
-// ============================================
-// BACK4APP FUNCTIONS
-// ============================================
-
-// Load all posts from Back4app
-async function loadPosts() {
-  if (!isConfigured) {
-    document.getElementById('configNotice').style.display = 'block';
-    return;
-  }
-
-  showLoading();
+// Save & Render Posts
+function savePosts() {
   try {
-    const Post = Parse.Object.extend('BlogPost');
-    const query = new Parse.Query(Post);
-    query.descending('createdAt');
-    query.limit(1000);
-    
-    const results = await query.find();
-    STATE.posts = results.map(post => ({
-      id: post.id,
-      category: post.get('category'),
-      title: post.get('title'),
-      content: post.get('content'),
-      date: post.get('date'),
-      timestamp: post.createdAt.getTime()
-    }));
-    
+    localStorage.setItem('poligeistPosts', JSON.stringify(STATE.posts));
     renderPosts();
-  } catch (error) {
-    console.error('Error loading posts:', error);
-    showError('Error loading posts: ' + error.message);
-  } finally {
-    hideLoading();
+  } catch (e) {
+    console.error('Error saving posts:', e);
+    alert('Error saving posts. Your browser storage may be full.');
   }
 }
 
-// Save a new post to Back4app
-async function savePost(postData) {
-  if (!isConfigured) {
-    alert('Please configure Back4app credentials first.');
-    return false;
-  }
-
-  showLoading();
-  try {
-    const Post = Parse.Object.extend('BlogPost');
-    const post = new Post();
-    
-    post.set('category', postData.category);
-    post.set('title', postData.title);
-    post.set('content', postData.content);
-    post.set('date', postData.date);
-    
-    await post.save();
-    await loadPosts();
-    return true;
-  } catch (error) {
-    console.error('Error saving post:', error);
-    showError('Error saving post: ' + error.message);
-    return false;
-  } finally {
-    hideLoading();
-  }
-}
-
-// Delete a post from Back4app
-async function deletePost(postId) {
-  if (!confirm('Are you sure you want to delete this post?')) {
-    return;
-  }
-
-  showLoading();
-  try {
-    const Post = Parse.Object.extend('BlogPost');
-    const query = new Parse.Query(Post);
-    const post = await query.get(postId);
-    await post.destroy();
-    await loadPosts();
-  } catch (error) {
-    console.error('Error deleting post:', error);
-    showError('Error deleting post: ' + error.message);
-  } finally {
-    hideLoading();
-  }
-}
-
-// Save subscriber to Back4app
-async function saveSubscriber(email) {
-  if (!isConfigured) {
-    return false;
-  }
-
-  try {
-    const Subscriber = Parse.Object.extend('Subscriber');
-    const query = new Parse.Query(Subscriber);
-    query.equalTo('email', email);
-    const existing = await query.first();
-    
-    if (existing) {
-      return true; // Already subscribed
-    }
-    
-    const subscriber = new Subscriber();
-    subscriber.set('email', email);
-    await subscriber.save();
-    return true;
-  } catch (error) {
-    console.error('Error saving subscriber:', error);
-    showError('Error subscribing: ' + error.message);
-    return false;
-  }
-}
-
-// ============================================
-// RENDER FUNCTIONS
-// ============================================
 function renderPosts() {
   renderFeaturedPost();
   renderCategoryPosts();
@@ -722,7 +491,7 @@ function renderFeaturedPost() {
     featuredContainer.innerHTML = `
       <div class="empty-state">
         <h3>Welcome to The PoliGeist</h3>
-        <p>No articles published yet. ${STATE.currentUser ? 'Create your first post using the admin panel above!' : 'Check back soon for new content!'}</p>
+        <p>No articles published yet. Toggle the admin panel to create your first post!</p>
       </div>`;
   } else {
     const latest = STATE.posts[0];
@@ -739,6 +508,16 @@ function renderFeaturedPost() {
         <div class="post-content">${escapeHTML(preview)}</div>
         <button class="read-more-btn" onclick="goToFullArticle('${latest.category}')">Read More →</button>
       </article>`;
+  }
+}
+
+// Navigate to full article in appropriate tab
+function goToFullArticle(category) {
+  const tabButton = document.querySelector(`.nav-tab[onclick*="${category}"]`);
+  if (tabButton) {
+    switchTab(category, tabButton);
+    // Scroll to top of page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
@@ -759,12 +538,11 @@ function renderCategoryPosts() {
       container.innerHTML = `
         <div class="empty-state">
           <h3>No posts yet</h3>
-          <p>${STATE.currentUser ? 'Create your first post in this category!' : 'Check back soon for new content!'}</p>
+          <p>Toggle the admin panel above to create your first post!</p>
         </div>`;
     } else {
       container.innerHTML = catPosts.map(post => `
         <article class="post">
-          ${STATE.currentUser ? `<button class="delete-post-btn" onclick="deletePost('${post.id}')">Delete</button>` : ''}
           <h2>${escapeHTML(post.title)}</h2>
           <div class="post-meta">${escapeHTML(post.date)}</div>
           <div class="post-content">${post.content}</div>
@@ -773,5 +551,163 @@ function renderCategoryPosts() {
   });
 }
 
-// Navigate to full article in appropriate tab
-function goToFullArtic
+// Post Form
+function initializeForm() {
+  const form = document.getElementById('postForm');
+  if (!form) return;
+  
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const category = document.getElementById('category').value;
+    const title = document.getElementById('title').value.trim();
+    const contentEl = document.getElementById('content');
+    const content = contentEl.innerHTML.trim();
+    
+    if (!title || !content) {
+      alert('Please fill in both title and content.');
+      return;
+    }
+    
+    const post = {
+      category,
+      title,
+      content,
+      date: new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      timestamp: Date.now(),
+      id: Date.now().toString()
+    };
+    
+    STATE.posts.unshift(post);
+    savePosts();
+    
+    // Reset form
+    document.getElementById('category').value = 'about';
+    document.getElementById('title').value = '';
+    contentEl.innerHTML = '';
+    updateTitleCounter();
+    
+    alert('Post published successfully!');
+  });
+  
+  // Title character counter
+  const titleInput = document.getElementById('title');
+  if (titleInput) {
+    titleInput.addEventListener('input', updateTitleCounter);
+  }
+}
+
+function updateTitleCounter() {
+  const titleInput = document.getElementById('title');
+  const counter = document.getElementById('titleCounter');
+  if (titleInput && counter) {
+    const length = titleInput.value.length;
+    counter.textContent = `${length} / 200`;
+  }
+}
+
+// Admin Panel
+function toggleAdmin() {
+  const panel = document.getElementById('adminPanel');
+  const button = document.querySelector('.toggle-btn');
+  
+  if (panel && button) {
+    const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    button.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  }
+}
+
+// Export Posts
+function exportPosts() {
+  try {
+    const dataStr = JSON.stringify(STATE.posts, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `poligeist-posts-${Date.now()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error('Error exporting posts:', e);
+    alert('Error exporting posts.');
+  }
+}
+
+// Toolbar functions
+function format(command) {
+  try {
+    document.execCommand(command, false, null);
+    document.getElementById('content').focus();
+  } catch (e) {
+    console.error('Error formatting text:', e);
+  }
+}
+
+function insertImage() {
+  const url = prompt("Enter image URL (must be hosted online):");
+  if (url && url.trim()) {
+    // Basic URL validation
+    try {
+      new URL(url);
+      document.execCommand('insertImage', false, url.trim());
+      document.getElementById('content').focus();
+    } catch (e) {
+      alert('Please enter a valid URL.');
+    }
+  }
+}
+
+// Subscription
+function subscribe(event) {
+  if (event) event.preventDefault();
+  
+  const emailInput = document.getElementById('subscriber-email');
+  const email = emailInput.value.trim();
+  
+  if (!email) return;
+  
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  
+  try {
+    if (!STATE.subscribers.includes(email)) {
+      STATE.subscribers.push(email);
+      localStorage.setItem('poligeistSubscribers', JSON.stringify(STATE.subscribers));
+    }
+    
+    const thankYouMsg = document.getElementById('thank-you-msg');
+    if (thankYouMsg) {
+      thankYouMsg.style.display = 'block';
+      setTimeout(() => {
+        thankYouMsg.style.display = 'none';
+      }, 5000);
+    }
+    
+    emailInput.value = '';
+  } catch (e) {
+    console.error('Error subscribing:', e);
+    alert('Error saving subscription. Please try again.');
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  initializeState();
+  initializeForm();
+  renderPosts();
+  updateClock();
+  setInterval(updateClock, 1000);
+});
+</script>
+</body>
+</html>
