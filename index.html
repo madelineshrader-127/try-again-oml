@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The PoliGeist – Politics, Culture, and the Supernatural</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Reset and base styles */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: Georgia, 'Times New Roman', serif; line-height:1.8; color:#333; background:#f9f9f9; }
+
+    /* Header */
+    header {
+      background: #555879; /* Updated base color */
+      color: white;
+      padding: 2.5rem 0;
+      text-align: center;
+      border-bottom: 4px solid #98A1BC; /* Updated accent color */
+    }
+    h1 { font-size:3rem; font-weight:700; letter-spacing:2px; margin-bottom:0.5rem; }
+    .subtitle { font-size:1.1rem; font-style:italic; opacity:0.9; }
+
+    /* Nav */
+    nav {
+      background: #555879;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+    .nav-tab {
+      flex: 1;
+      padding: 1rem 2rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ecf0f1;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      font-family: Georgia, serif;
+    }
+    .nav-tab:hover {
+      background: #6a6d8c;
+      color: white;
+    }
+    .nav-tab.active {
+      background: #6a6d8c;
+      border-bottom-color: #98A1BC;
+    }
+
+    /* Main container */
+    .container { max-width:900px; margin:0 auto; padding:2rem 20px; }
+
+    /* Tabs content */
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+
+    /* Admin panel toggle */
+    .admin-toggle { text-align:center; margin:2rem 0; }
+    .toggle-btn { background:#95a5a6; color:white; border:none; padding:0.75rem 1.5rem; font-size:0.95rem; border-radius:4px; cursor:pointer; transition:background 0.3s; font-family:Georgia, serif; }
+    .toggle-btn:hover { background:#7f8c8d; }
+
+    /* Admin panel form */
+    .admin-panel { background:white; margin:2rem 0; padding:2rem; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border-left:4px solid #98A1BC; }
+    .admin-panel h2 { font-size:1.8rem; margin-bottom:1.5rem; color:#2c3e50; }
+    .form-group { margin-bottom:1.5rem; }
+    label { display:block; font-weight:600; margin-bottom:0.5rem; color:#2c3e50; font-size:1rem; }
+    input, select { width:100%; padding:0.75rem; border:1px solid #bdc3c7; border-radius:4px; font-size:1rem; font-family:Georgia, serif; transition:border-color 0.3s; }
+    select { background:white; cursor:pointer; }
+    input:focus, textarea:focus, select:focus { outline:none; border-color:#98A1BC; }
+
+    /* Editor toolbar */
+    #toolbar button {
+      background:#98A1BC; color:white; border:none; padding:0.4rem 0.8rem; margin-right:0.3rem; border-radius:4px; cursor:pointer; font-family:Georgia, serif; font-size:0.9rem;
+    }
+    #toolbar button:hover { background:#7f879c; }
+
+    /* Editor */
+    #content {
+      min-height:200px;
+      border:1px solid #bdc3c7;
+      border-radius:4px;
+      padding:0.75rem;
+      font-family:Georgia, serif;
+    }
+
+    /* Buttons */
+    button[type="submit"], .subscribe-btn { background:#98A1BC; color:white; border:none; padding:0.75rem 2rem; font-size:1rem; border-radius:4px; cursor:pointer; transition:background 0.3s; font-family:Georgia, serif; font-weight:600; }
+    button[type="submit"]:hover, .subscribe-btn:hover { background:#7f879c; }
+    .export-btn { background:#27ae60; margin-left:1rem; }
+    .export-btn:hover { background:#229954; }
+
+    /* Posts */
+    .post { background:white; padding:2.5rem; margin-bottom:2rem; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border-left:4px solid #98A1BC; }
+    .post h2 { font-size:2rem; color:#2c3e50; margin-bottom:0.75rem; line-height:1.3; }
+    .post-meta { color:#7f8c8d; font-size:0.95rem; margin-bottom:1.5rem; font-style:italic; }
+    .post-content { color:#34495e; font-size:1.1rem; line-height:1.8; white-space:pre-wrap; }
+
+    /* Empty states */
+    .empty-state { text-align:center; padding:4rem 2rem; color:#95a5a6; background:white; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    .empty-state h3 { font-size:1.8rem; margin-bottom:1rem; color:#7f8c8d; }
+    .empty-state p { font-size:1.1rem; }
+
+    /* Featured post */
+    .featured-post { background:white; padding:3rem; margin-bottom:2rem; border-radius:4px; box-shadow:0 4px 12px rgba(0,0,0,0.15); border-left:6px solid #98A1BC; }
+    .featured-label { display:inline-block; background:#98A1BC; color:white; padding:0.4rem 1rem; font-size:0.85rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem; border-radius:3px; }
+
+    /* Subscribe box */
+    #subscribe-box { text-align:center; margin:3rem 0; }
+    #subscribe-box input[type=email] { max-width:300px; margin-right:0.5rem; }
+    .thank-you { color:#98A1BC; font-weight:600; margin-top:1rem; display:none; }
+
+    /* Footer */
+    footer {
+      background:#555879;
+      color:white;
+      text-align:center;
+      padding:1.5rem 0;
+      margin-top:2rem;
+    }
+    footer a {
+      color:white;
+      text-decoration:none;
+      margin:0 1rem;
+      font-size:1.5rem;
+    }
+    footer a:hover {
+      color:#98A1BC;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>The PoliGeist</h1>
+  <p class="subtitle">Politics, Culture, and the Supernatural</p>
+  <div id="jst-clock" style="margin-top:0.5rem; font-size:0.95rem; opacity:0.85;"></div>
+</header>
+
+<nav>
+  <div class="nav-container">
+    <button class="nav-tab active" onclick="switchTab('home')">Home</button>
+    <button class="nav-tab" onclick="switchTab('about')">About</button>
+    <button class="nav-tab" onclick="switchTab('politics')">Politics</button>
+    <button class="nav-tab" onclick="switchTab('japanese')">Japanese Supernatural Culture</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="admin-toggle">
+    <button class="toggle-btn" onclick="toggleAdmin()">Toggle Admin Panel</button>
+  </div>
+
+  <div class="admin-panel" id="adminPanel" style="display:none;">
+    <h2>Add New Post</h2>
+    <form id="postForm">
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" required>
+          <option value="about">About</option>
+          <option value="politics">Politics</option>
+          <option value="japanese">Japanese Supernatural Culture</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" required>
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <div id="toolbar">
+          <button type="button" onclick="format('bold')"><b>B</b></button>
+          <button type="button" onclick="format('italic')"><i>I</i></button>
+          <button type="button" onclick="format('underline')"><u>U</u></button>
+          <button type="button" onclick="format('insertUnorderedList')">• List</button>
+          <button type="button" onclick="format('insertOrderedList')">1. List</button>
+          <button type="button" onclick="insertImage()">🖼️ Image</button>
+        </div>
+        <div id="content" contenteditable="true"></div>
+      </div>
+      <button type="submit">Publish Post</button>
+      <button type="button" class="export-btn" onclick="exportPosts()">Export Data</button>
+    </form>
+  </div>
+
+  <div id="homeTab" class="tab-content active">
+    <div id="featuredPost">
+      <div class="empty-state">
+        <h3>Welcome to The PoliGeist</h3>
+        <p>No articles published yet. Toggle the admin panel to create your first post!</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="aboutTab" class="tab-content">
+    <div id="postsAbout" class="posts"></div>
+  </div>
+
+  <div id="politicsTab" class="tab-content">
+    <div id="postsPolitics" class="posts"></div>
+  </div>
+
+  <div id="japaneseTab" class="tab-content">
+    <div id="postsJapanese" class="posts"></div>
+  </div>
+
+  <!-- Subscribe box -->
+  <div id="subscribe-box">
+    <input type="email" id="subscriber-email" placeholder="Enter your email" required>
+    <button class="subscribe-btn" onclick="subscribe()">Subscribe</button>
+    <div class="thank-you" id="thank-you-msg">Thank you for subscribing!</div>
+  </div>
+</div>
+
+<footer>
+  <a href="https://www.linkedin.com/in/madeline-paul-shrader569514369?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank"><i class="fab fa-linkedin"></i></a>
+  <a href="mailto:madeline.shrader@gmail.com"><i class="fas fa-envelope"></i></a>
+</footer>
+
+<script>
+let posts = JSON.parse(localStorage.getItem('poligeistPosts')) || [];
+let subscribers = JSON.parse(localStorage.getItem('poligeistSubscribers')) || [];
+let currentTab = 'home';
+
+/* JST Clock */
+function updateClock() {
+  const now = new Date(new Date().toLocaleString("en-US", {timeZone:"Asia/Tokyo"}));
+  const options = { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
+  document.getElementById('jst-clock').textContent = now.toLocaleDateString('en-US', options);
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* Tabs */
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.nav-tab').forEach(btn=>btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(content=>content.classList.remove('active'));
+  document.getElementById(tab+'Tab').classList.add('active');
+}
+
+/* Save & Render Posts */
+function savePosts(){
+  localStorage.setItem('poligeistPosts', JSON.stringify(posts));
+  renderPosts();
+}
+function renderPosts(){
+  const featuredContainer=document.getElementById('featuredPost');
+  if(posts.length===0){
+    featuredContainer.innerHTML=`<div class="empty-state"><h3>Welcome to The PoliGeist</h3><p>No articles published yet. Toggle the admin panel to create your first post!</p></div>`;
+  } else {
+    const latest=posts[0];
+    const preview=latest.content.substring(0,400)+(latest.content.length>400?'...':'');
+    featuredContainer.innerHTML=`<article class="featured-post"><span class="featured-label">Latest Article</span><h2>${latest.title}<span class="category-badge">${latest.category}</span></h2><div class="post-meta">${latest.date}</div><div class="post-content">${preview}</div></article>`;
+  }
+  const containers={about:'postsAbout',politics:'postsPolitics',japanese:'postsJapanese'};
+  Object.keys(containers).forEach(category=>{
+    const container=document.getElementById(containers[category]);
+    const catPosts=posts.filter(p=>p.category===category);
+    if(catPosts.length===0){
+      container.innerHTML=`<div class="empty-state"><h3>No posts yet</h3><p>Toggle the admin panel above to create your first post!</p></div>`;
+    } else {
+      container.innerHTML=catPosts.map((post,idx)=>`
+        <article class="post">
+          <h2>${post.title}</h2>
+          <div class="post-meta">${post.date}</div>
+          <div class="post-content">${post.content}</div>
+        </article>`).join('');
+    }
+  });
+}
+
+/* Post Form */
+document.getElementById('postForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const category=document.getElementById('category').value;
+  const title=document.getElementById('title').value;
+  const content=document.getElementById('content').innerHTML.trim();
+  const post={category,title,content,date:new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}),timestamp:Date.now(),comments:[]};
+  posts.unshift(post);
+  savePosts();
+  document.getElementById('category').value='about';
+  document.getElementById('title').value='';
+  document.getElementById('content').innerHTML='';
+  alert('Post published successfully!');
+});
+
+/* Admin Panel */
+function toggleAdmin(){
+  const panel=document.getElementById('adminPanel');
+  panel.style.display=panel.style.display==='none'?'block':'none';
+}
+
+/* Export Posts */
+function exportPosts(){
+  const dataStr=JSON.stringify(posts,null,2);
+  const blob=new Blob([dataStr],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download='poligeist-blog-posts.json';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+/* Toolbar functions */
+function format(command) {
+  document.execCommand(command, false, null);
+}
+function insertImage() {
+  const url = prompt("Enter image URL (must be hosted online):");
+  if (url) {
+    document.execCommand('insertImage', false, url);
+  }
+}
+
+/* Subscription */
+function subscribe(){
+  const email=document.getElementById('subscriber-email').value.trim();
+  if(!email) return;
+  if(!subscribers.includes(email)) subscribers.push(email);
+  localStorage.setItem('poligeistSubscribers', JSON.stringify(subscribers));
+  document.getElementById('thank-you-msg').style.display='block';
+  document.getElementById('subscriber-email').value='';
+}
+
+renderPosts();
+</script>
+</body>
+</html>
